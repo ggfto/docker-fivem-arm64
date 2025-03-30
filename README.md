@@ -4,7 +4,7 @@ A Docker image for running a FiveM server with FEX-Emu in Docker on ARM64, based
 
 To use this image, run: ```docker pull moodpatcher/fivem-arm64:latest```
 
-Docker CLI:
+Podman CLI:
 
 ```bash 
 podman run -it \
