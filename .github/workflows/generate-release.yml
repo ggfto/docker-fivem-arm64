@@ -19,11 +19,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
       - name: Set lowercase repository name
         id: repo_name
         run: |
@@ -35,41 +30,9 @@ jobs:
           lowercase_repo: ${{ env.lowercase_repo }}
         run: |
           LOWERCASE_REPO="ghcr.io/${{ env.lowercase_repo }}"
-          # Atualiza a versão no package.json
-          npm version ${{ github.ref_name }} --no-git-tag-version || echo "Versão já está configurada."
-
-          # Remove arquivos antigos
+                # Remove arquivos antigos
           rm -f README.md
           rm -f docker-compose.yml
-
-          # Substitui variáveis no README e no docker-compose.yml
-          sed -e "s|{{repository}}|${{ github.repository }}|g" \
-            README.template.md > README.md
-
-          sed -e "s|{{lowercase_repo}}|${LOWERCASE_REPO}|g" \
-            -e "s|{{repository}}|${{ github.event.repository.name }}|g" \
-            docker-compose.yml.template > docker-compose.yml
-
-          # Configura o Git para o commit
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Adiciona os arquivos alterados ao commit
-          git add README.md docker-compose.yml package.json
-          git commit -m "Feat: Atualizado README.md e docker-compose.yml" || echo "Nenhuma mudança detectada."
-          git push origin HEAD:main
-
-      - name: Install dependencies
-        working-directory: ./src
-        run: npm install
-
-      - name: Cache Node.js modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
 
       - name: Set up QEMU
         id: qemu
