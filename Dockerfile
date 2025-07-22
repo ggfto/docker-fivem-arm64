@@ -32,7 +32,6 @@ RUN apt-get purge -y software-properties-common git && apt-get autoremove -y
 
 COPY server.cfg /defaults/server-data/
 COPY startscript.sh /startscript.sh
-COPY fex-emu-rootfs.tar.gz /tmp/
 
 # Extrai RootFS se incluído manualmente
 RUN mkdir -p /root/.fex-emu && \
